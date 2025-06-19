@@ -8,6 +8,9 @@ _searcher = TavilySearchAPIWrapper()
 
 def web_search(state: Dict[str, Any]) -> Dict[str, Any]:
     """Perform web search for given keywords and store references."""
+    if not state.get("ext_flag"):
+        return state
+
     keywords = state.get("keywords") or []
     if not keywords:
         return state

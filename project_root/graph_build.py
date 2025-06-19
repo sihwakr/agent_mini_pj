@@ -22,6 +22,8 @@ class PaperState(TypedDict, total=False):
     chunks: List[Document]
     vector: Any
     summary_type: str
+    lang_option: str
+    ext_flag: bool
     summary_ko: str
     summary_en: str
     user_query: str

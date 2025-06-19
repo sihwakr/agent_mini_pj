@@ -28,14 +28,19 @@ def answer(state: Dict[str, Any]) -> Dict[str, Any]:
     docs = state.get("retrieved_docs")
     query = state.get("user_query")
     vectordb = state.get("vector")
+    lang_option = state.get("lang_option", "한국어")
     if not docs or not query or not vectordb:
         state["error"] = "No documents or query for answering"
         return state
 
     try:
         qa_chain = RetrievalQA.from_chain_type(llm=LLM, retriever=vectordb.as_retriever())
-        result = qa_chain.run(query)
-        state["answer_ko"] = result
+        answer_ko = qa_chain.run(query + "\n한국어로 답변해 주세요.")
+        state["answer_ko"] = answer_ko
+
+        if "영어" in lang_option:
+            answer_en = qa_chain.run(query + "\nPlease answer in English.")
+            state["answer_en"] = answer_en
     except Exception as exc:
         state["error"] = str(exc)
     return state
